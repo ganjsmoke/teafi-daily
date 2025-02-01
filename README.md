@@ -13,7 +13,7 @@ This script automates the process of check-ins and swaps for the Tea-Fi platform
 Clone this repository to your local machine by running the following command in your terminal:
 
 ```
-git clone https://github.com/ganjmsoke/teafi-daily.git
+git clone https://github.com/ganjsmoke/teafi-daily.git
 cd teafi-daily
 ```
 
