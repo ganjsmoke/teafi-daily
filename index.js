@@ -343,14 +343,30 @@ async function notifyTransaction(hash, walletAddress, amount, fromToken, toToken
     gasFeeTokenSymbol: 'POL',
     gasFeeAmount: gasFeeAmount.toString() // Use gasInNativeToken from API
   };
-  
 
   try {
-    await retryWithDelay(() => axios.post('https://api.tea-fi.com/transaction', payload));
-    console.log(chalk.green(`Transaction notification sent successfully. Points Amount: ${response.data.pointsAmount}`));
+    await retryWithDelay(async () => {
+      try {
+        const response = await axios.post('https://api.tea-fi.com/transaction', payload);
+        console.log(chalk.green(`Transaction notification sent successfully. Points Amount: ${response.data.pointsAmount}`));
+      } catch (error) {
+        console.error(chalk.red('Error notifying transaction:'));
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          console.error(chalk.red('Status:', error.response.status));
+          console.error(chalk.red('Data:', JSON.stringify(error.response.data, null, 2)));
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error(chalk.red('No response received from the API.'));
+        } else {
+          // Something happened in setting up the request
+          console.error(chalk.red('Error:', error.message));
+        }
+        throw error; // Re-throw the error to trigger retry
+      }
+    });
   } catch (error) {
-    console.error(chalk.red('Error notifying transaction:', error.message));
-	console.error(chalk.red('Reason:', error.response ? error.response.data : error.message));
+    console.error(chalk.red('Max retries reached. Failed to notify transaction.'));
   }
 }
 
