@@ -91,7 +91,7 @@ async function main() {
   printHeader();
 
   // Perform Auto Checkin
-  //await autoCheckin(); // Directly call autoCheckin, as it already includes retry logic
+  await autoCheckin(); // Directly call autoCheckin, as it already includes retry logic
 
   // After check-in, perform Auto Swap
   await autoSwap(); // No retry needed here, just call autoSwap
