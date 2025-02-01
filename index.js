@@ -4,7 +4,7 @@ const axios = require('axios');
 const chalk = require('chalk');
 
 // Configuration Constants (use let for variables that need to change)
-const RPC_URL = 'https://polygon-mainnet.g.alchemy.com/v2/SHkG8y8Za3SNqJD5UnBWAJUsGDQzTJAV';
+const RPC_URL = 'YOUR ALCHEMY RPC';
 const POL_ADDRESS = '0x0000000000000000000000000000000000000000';
 const WPOL_ADDRESS = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270';
 const SWAP_LOOP_COUNT = 50;
