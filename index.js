@@ -4,7 +4,7 @@ const axios = require('axios');
 const chalk = require('chalk');
 
 // Configuration Constants (use let for variables that need to change)
-const RPC_URL = 'YOUR ALCHEMY RPC';
+const RPC_URL = 'https://polygon-mainnet.g.alchemy.com/v2/SHkG8y8Za3SNqJD5UnBWAJUsGDQzTJAV';
 const POL_ADDRESS = '0x0000000000000000000000000000000000000000';
 const WPOL_ADDRESS = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270';
 const SWAP_LOOP_COUNT = 50;
@@ -91,7 +91,7 @@ async function main() {
   printHeader();
 
   // Perform Auto Checkin
-  await autoCheckin(); // Directly call autoCheckin, as it already includes retry logic
+  //await autoCheckin(); // Directly call autoCheckin, as it already includes retry logic
 
   // After check-in, perform Auto Swap
   await autoSwap(); // No retry needed here, just call autoSwap
@@ -316,13 +316,13 @@ async function notifyTransaction(hash, walletAddress, amount, fromToken, toToken
 
   // Set the token addresses dynamically
   let fromTokenAddress, toTokenAddress;
-  if (fromToken === 'MATIC') {
+  if (fromToken === 'POL') {
     fromTokenAddress = POL_ADDRESS; // MATIC address
   } else if (fromToken === 'WPOL') {
     fromTokenAddress = WPOL_ADDRESS; // WPOL address
   }
 
-  if (toToken === 'MATIC') {
+  if (toToken === 'POL') {
     toTokenAddress = POL_ADDRESS; // MATIC address
   } else if (toToken === 'WPOL') {
     toTokenAddress = WPOL_ADDRESS; // WPOL address
@@ -343,12 +343,14 @@ async function notifyTransaction(hash, walletAddress, amount, fromToken, toToken
     gasFeeTokenSymbol: 'POL',
     gasFeeAmount: gasFeeAmount.toString() // Use gasInNativeToken from API
   };
+  
 
   try {
     await retryWithDelay(() => axios.post('https://api.tea-fi.com/transaction', payload));
-    console.log(chalk.cyan('Transaction notification sent.'));
+    console.log(chalk.green(`Transaction notification sent successfully. Points Amount: ${response.data.pointsAmount}`));
   } catch (error) {
     console.error(chalk.red('Error notifying transaction:', error.message));
+	console.error(chalk.red('Reason:', error.response ? error.response.data : error.message));
   }
 }
 
